@@ -244,5 +244,61 @@ forms: a_form_name"
 )
 
 ## ------------------------------------------------------------------------
+treatment_shrink <- ctu05_data$treatment[, c("mnpcvpid", "rando_treatment")]
+
+## ------------------------------------------------------------------------
+bl_treat <- merge(x = ctu05_data$baseline, y = treatment_shrink,
+                  by = "mnpcvpid", all.x = TRUE)
+# check dimensions
+dim(ctu05_data$baseline)
+dim(bl_treat)
+
+## ------------------------------------------------------------------------
+bl_surg <- merge(x = ctu05_data$baseline, y = ctu05_data$esurgeries, by = "mnpdocid")
+
+## ------------------------------------------------------------------------
+table(ctu05_data$esurgeries$mnpdocid)
+
+## ------------------------------------------------------------------------
+# before merge
+table(ctu05_data$baseline$height)
+
+# after merge
+table(bl_surg$height)
+
+## ------------------------------------------------------------------------
+# write a temporary object
+surg <- ctu05_data$esurgeries[, c("mnpdocid", "surgery_organ.factor")]
+# only retain non NA rows
+surg <- surg[which(! is.na(surg$surgery_organ.factor)), ]
+# show it
+surg
+
+## ------------------------------------------------------------------------
+library(tidyr) # pivot_wider
+# add a count
+surg$count <- 1
+# show the data
+surg
+
+# make it wide
+surg_wide <- pivot_wider(surg, names_from = surgery_organ.factor, values_from = count)
+# show the wide data
+surg_wide
+
+
+## ------------------------------------------------------------------------
+# merge
+bl_surg_no_dup <- merge(x = ctu05_data$baseline, y = surg_wide,
+                        by = "mnpdocid", all.x = TRUE)
+
+# compare dimensions
+dim(bl_surg_no_dup)
+dim(ctu05_data$baseline)
+
+# check the height variable
+table(bl_surg_no_dup$height)
+
+## ------------------------------------------------------------------------
 sessionInfo()
 

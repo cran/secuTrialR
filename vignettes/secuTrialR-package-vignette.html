@@ -262,7 +262,7 @@ devtools::install_github(&quot;SwissClinicalTrialOrganisation/secuTrialR&quot;)
 suppressMessages(library(secuTrialR))
 # show secuTrialR version
 packageVersion(&quot;secuTrialR&quot;)
-#&gt; [1] &#39;1.0.3&#39;
+#&gt; [1] &#39;1.0.6&#39;
 </code></pre>
 
 <h1>The CTU05 dataset</h1>
@@ -342,7 +342,7 @@ from the suggested export option configuraion.</p>
 
 <pre><code class="r">print(ctu05_data)
 #&gt; secuTrial data imported from:
-#&gt; /tmp/RtmpALtmNc/Rinst52c0e24fa46/secuTrialR/extdata/sT_exports/exp_opt/
+#&gt; /tmp/Rtmp3h4w8z/Rinst225b11c8d525/secuTrialR/extdata/sT_exports/exp_opt/
 #&gt; s_export_CSV-xls_CTU05_all_info.zip 
 #&gt;            table nrow ncol  meta       original_name
 #&gt;               vp    4   12  TRUE              vp.xls
@@ -902,10 +902,13 @@ centres &lt;- c(&quot;Inselspital Bern (RPACK)&quot;, &quot;Universitätsspital 
 
 # exclude Bern and Basel
 ctu05_data_berlin &lt;- subset_secuTrial(ctu05_data, centre = centres, exclude = TRUE)
+#&gt; If you changed any labels in the secuTrialdata object manually these will be reset to their original state.
 # exclude Berlin
 ctu05_data_bern_basel &lt;- subset_secuTrial(ctu05_data, centre = centres)
+#&gt; If you changed any labels in the secuTrialdata object manually these will be reset to their original state.
 # keep only subset of participants
 ctu05_data_pids &lt;- subset_secuTrial(ctu05_data, participant = participants)
+#&gt; If you changed any labels in the secuTrialdata object manually these will be reset to their original state.
 
 class(ctu05_data_berlin)
 #&gt; [1] &quot;secuTrialdata&quot;
@@ -941,6 +944,7 @@ Let&#39;s say you would only like to look at the recruitment plot for Bern alone
 
 <pre><code class="r"># keep only Bern
 ctu05_data_bern &lt;- subset_secuTrial(ctu05_data, centre = &quot;Inselspital Bern (RPACK)&quot;)
+#&gt; If you changed any labels in the secuTrialdata object manually these will be reset to their original state.
 # plot
 plot_recruitment(ctu05_data_bern)
 </code></pre>
@@ -954,6 +958,7 @@ plot_recruitment(ctu05_data_bern)
 ctu05_data_bern_berlin &lt;- subset_secuTrial(ctu05_data,
                                            centre = c(&quot;Inselspital Bern (RPACK)&quot;,
                                                       &quot;Charité Berlin (RPACK)&quot;))
+#&gt; If you changed any labels in the secuTrialdata object manually these will be reset to their original state.
 # plot
 plot_recruitment(ctu05_data_bern_berlin)
 </code></pre>
@@ -1096,6 +1101,145 @@ is triggered. It indicates which variables in which forms are affected.</p>
 #&gt; forms: a_form_name
 </code></pre>
 
+<h1>Merging forms in the <code>secuTrialdata</code> object</h1>
+
+<p>Naturally, you will sometimes need to merge/join some of the data from the individual form data stored
+in your <code>secuTrialdata</code> object. To achieve this you can use the base R <code>merge()</code> function.
+For our dataset we might be interested in merging the <code>baseline</code> form data with that of the <code>treatment</code>
+form. For this we can use the <code>mnpcvpid</code> which uniquely identifies each participant visit. Since we
+are only interested in the <code>rando_treatment</code> variable we will shrink the data in the <code>treatment</code> form prior to merging.</p>
+
+<p>\vspace{5pt}</p>
+
+<pre><code class="r">treatment_shrink &lt;- ctu05_data$treatment[, c(&quot;mnpcvpid&quot;, &quot;rando_treatment&quot;)]
+</code></pre>
+
+<p>Because we do not want to drop non-matching rows from <code>baseline</code> we set <code>all.x = TRUE</code>.
+As you can see from the <code>dim()</code> calls, one column has been added after the merge.
+This corresponds to the <code>rando_treatment</code> variable.</p>
+
+<pre><code class="r">bl_treat &lt;- merge(x = ctu05_data$baseline, y = treatment_shrink,
+                  by = &quot;mnpcvpid&quot;, all.x = TRUE)
+# check dimensions
+dim(ctu05_data$baseline)
+#&gt; [1]  17 107
+dim(bl_treat)
+#&gt; [1]  17 108
+</code></pre>
+
+<p>Another common task may be to merge repetition form data to its parent form.
+In our case <code>esurgeries</code> can be naively merged with <code>baseline</code> via the
+<code>mnpdocid</code> (from the secuTrial manual: &ldquo;Each eCRF document record has a unique document identifier.&rdquo;):</p>
+
+<p>\vspace{5pt}</p>
+
+<pre><code class="r">bl_surg &lt;- merge(x = ctu05_data$baseline, y = ctu05_data$esurgeries, by = &quot;mnpdocid&quot;)
+</code></pre>
+
+<p>Please note, that such naive merging can cause duplication of data if the ids that the merge is directed by are not unique.
+This also happened during the production of <code>bl_surg</code> in the code above. Participant &ldquo;RPACK-INS-012&rdquo; exhibits the
+<code>mnpdocid</code> 234 twice in the <code>esurgeries</code> repetition form which causes a duplication of the <code>baseline</code> data matching
+<code>mnpdocid</code> 234.</p>
+
+<p>\vspace{5pt}</p>
+
+<pre><code class="r">table(ctu05_data$esurgeries$mnpdocid)
+#&gt; 
+#&gt; 180 184 187 191 199 203 211 216 220 222 230 234 238 243 249 255 265 
+#&gt;   1   1   1   1   1   1   1   1   1   1   1   2   1   1   1   1   1
+</code></pre>
+
+<p>Lets briefly illustrate the consequences by looking at a <code>table()</code> of the <code>height</code> variable from the <code>baseline</code>
+form before and after merging.</p>
+
+<p>\vspace{5pt}</p>
+
+<pre><code class="r"># before merge
+table(ctu05_data$baseline$height)
+#&gt; 
+#&gt; 110.1   150 150.1   160 167.9 170.3 170.4   180 180.1 190.2 
+#&gt;     1     1     1     1     1     1     1     3     3     1
+
+# after merge
+table(bl_surg$height)
+#&gt; 
+#&gt; 110.1   150 150.1   160 167.9 170.3 170.4   180 180.1 190.2 
+#&gt;     1     1     1     1     1     1     1     4     3     1
+</code></pre>
+
+<p>A closer look reveals that <code>180</code> now appears four times instead of three, which can be attributed to
+the duplication. This is not a favourable outcome because it can cause confusion and misinterpretation.
+A better approach is to change the structure of your repetition form before merging to make the ids you merge by unique.
+For this you need to investigate which data you would like to merge and design an appropriate stategy.
+In our example case we are interested in the <code>surgery_organ</code>. Of course we also need to drag the <code>mnpdocid</code> along
+to perform the actual merge.</p>
+
+<p>\vspace{5pt}</p>
+
+<pre><code class="r"># write a temporary object
+surg &lt;- ctu05_data$esurgeries[, c(&quot;mnpdocid&quot;, &quot;surgery_organ.factor&quot;)]
+# only retain non NA rows
+surg &lt;- surg[which(! is.na(surg$surgery_organ.factor)), ]
+# show it
+surg
+#&gt;    mnpdocid surgery_organ.factor
+#&gt; 12      234              Stomach
+#&gt; 13      234                Other
+</code></pre>
+
+<p>\newpage</p>
+
+<p>In order to prevent duplication we can restructure the data before merging.</p>
+
+<p>\vspace{5pt}</p>
+
+<pre><code class="r">library(tidyr) # pivot_wider
+# add a count
+surg$count &lt;- 1
+# show the data
+surg
+#&gt;    mnpdocid surgery_organ.factor count
+#&gt; 12      234              Stomach     1
+#&gt; 13      234                Other     1
+
+# make it wide
+surg_wide &lt;- pivot_wider(surg, names_from = surgery_organ.factor, values_from = count)
+# show the wide data
+surg_wide
+#&gt; # A tibble: 1 x 3
+#&gt;   mnpdocid Stomach Other
+#&gt;      &lt;int&gt;   &lt;dbl&gt; &lt;dbl&gt;
+#&gt; 1      234       1     1
+</code></pre>
+
+<p>Checking the dimensions before and after merging reveals that the structure, especially the line count, remains
+the same except for the data added from the <code>esurgeries</code> repetition form (i.e. <code>Stomach</code> and <code>Other</code>). Also,
+as expected, the <code>table()</code> of the height variable returns the expected result (i.e. 180 is present three not four times).</p>
+
+<p>\vspace{5pt}</p>
+
+<pre><code class="r"># merge
+bl_surg_no_dup &lt;- merge(x = ctu05_data$baseline, y = surg_wide,
+                        by = &quot;mnpdocid&quot;, all.x = TRUE)
+
+# compare dimensions
+dim(bl_surg_no_dup)
+#&gt; [1]  17 109
+dim(ctu05_data$baseline)
+#&gt; [1]  17 107
+
+# check the height variable
+table(bl_surg_no_dup$height)
+#&gt; 
+#&gt; 110.1   150 150.1   160 167.9 170.3 170.4   180 180.1 190.2 
+#&gt;     1     1     1     1     1     1     1     3     3     1
+</code></pre>
+
+<p>The above description only provides a very brief and simplified example. Merging
+strategies need to be individually tailored and require a good understanding of the data at hand.
+The <code>links_secuTrial()</code> function may be helpful to understand which variables will allow you to
+merge forms.</p>
+
 <h1>A note on <code>mnp*</code> variables</h1>
 
 <p>There is a plethora of variables in the tables of secuTrial exports whose names start
@@ -1103,18 +1247,12 @@ with <code>mnp</code>. These are metadata variables which are e.g. important to 
 different tables. Explaining them all is beyond the scope of this vignette.
 For detailed explanations, please refer to the secuTrial &ldquo;Export Formats&rdquo; user manual.</p>
 
-<h1>Disclaimer</h1>
-
-<p>The descriptions of the secuTrial exports used in this vignette and other <code>secuTrialR</code>
-documentation correspond to our understanding of them and come with no warranty.
-For in depth details please refer to the original secuTrial manuals.</p>
-
 <p>\newpage</p>
 
 <pre><code class="r">sessionInfo()
 #&gt; R version 3.6.3 (2020-02-29)
 #&gt; Platform: x86_64-pc-linux-gnu (64-bit)
-#&gt; Running under: Ubuntu 18.04.4 LTS
+#&gt; Running under: Ubuntu 18.04.5 LTS
 #&gt; 
 #&gt; Matrix products: default
 #&gt; BLAS:   /usr/lib/x86_64-linux-gnu/blas/libblas.so.3.7.1
@@ -1130,20 +1268,28 @@ For in depth details please refer to the original secuTrial manuals.</p>
 #&gt; [1] stats     graphics  grDevices utils     datasets  methods   base     
 #&gt; 
 #&gt; other attached packages:
-#&gt; [1] secuTrialR_1.0.3
+#&gt; [1] tidyr_1.0.0      secuTrialR_1.0.6
 #&gt; 
 #&gt; loaded via a namespace (and not attached):
 #&gt;  [1] igraph_1.2.4.1   Rcpp_1.0.3       knitr_1.25       magrittr_1.5    
-#&gt;  [5] hms_0.5.2        tidyselect_0.2.5 R6_2.4.0         rlang_0.4.1     
-#&gt;  [9] highr_0.8        stringr_1.4.0    dplyr_0.8.5      tcltk_3.6.3     
-#&gt; [13] tools_3.6.3      xfun_0.10        htmltools_0.4.0  readxl_1.3.1    
-#&gt; [17] digest_0.6.22    assertthat_0.2.1 lifecycle_0.1.0  tibble_2.1.3    
-#&gt; [21] crayon_1.3.4     tidyr_1.0.0      purrr_0.3.3      readr_1.3.1     
-#&gt; [25] vctrs_0.2.0      zeallot_0.1.0    glue_1.3.1       evaluate_0.14   
-#&gt; [29] haven_2.2.0      stringi_1.4.3    cellranger_1.1.0 compiler_3.6.3  
-#&gt; [33] pillar_1.4.2     forcats_0.4.0    backports_1.1.5  lubridate_1.7.4 
-#&gt; [37] tufte_0.5        pkgconfig_2.0.3
+#&gt;  [5] hms_0.5.2        tidyselect_1.1.0 R6_2.4.0         rlang_0.4.6     
+#&gt;  [9] fansi_0.4.0      highr_0.8        stringr_1.4.0    dplyr_1.0.0     
+#&gt; [13] tcltk_3.6.3      tools_3.6.3      xfun_0.10        utf8_1.1.4      
+#&gt; [17] cli_1.1.0        htmltools_0.4.0  assertthat_0.2.1 readxl_1.3.1    
+#&gt; [21] digest_0.6.22    tibble_2.1.3     lifecycle_0.2.0  crayon_1.3.4    
+#&gt; [25] purrr_0.3.3      readr_1.3.1      vctrs_0.3.1      glue_1.4.1      
+#&gt; [29] evaluate_0.14    haven_2.3.1      stringi_1.4.3    cellranger_1.1.0
+#&gt; [33] compiler_3.6.3   pillar_1.4.2     forcats_0.4.0    generics_0.0.2  
+#&gt; [37] lubridate_1.7.4  tufte_0.5        pkgconfig_2.0.3
 </code></pre>
+
+<p>\vspace{185pt}</p>
+
+<p><strong>Disclaimer</strong></p>
+
+<p>The descriptions of the secuTrial exports used in this vignette and other <code>secuTrialR</code>
+documentation correspond to our understanding of them and come with no warranty.
+For in depth details please refer to the original secuTrial manuals.</p>
 
 </body>
 

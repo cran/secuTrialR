@@ -2,7 +2,7 @@ Package: secuTrialR
 Type: Package
 Title: Handling of Data from the Clinical Data Management System
         'secuTrial'
-Version: 1.0.3
+Version: 1.0.6
 Authors@R: 
     c(person(given = "Patrick R.",
              family = "Wright",
@@ -42,7 +42,7 @@ RoxygenNote: 7.1.0
 Suggests: knitr, lintr, rmarkdown, testthat, tufte
 VignetteBuilder: knitr
 NeedsCompilation: no
-Packaged: 2020-04-16 15:40:46 UTC; wrightp
+Packaged: 2020-10-26 08:40:24 UTC; wrightp
 Author: Patrick R. Wright [cre, aut, cph],
   Alan G. Haynes [aut, cph],
   Milica Markovic [aut, cph],
@@ -50,4 +50,4 @@ Author: Patrick R. Wright [cre, aut, cph],
   Armando Lenz [ctb],
   Pascal Benkert [com]
 Repository: CRAN
-Date/Publication: 2020-04-24 15:30:02 UTC
+Date/Publication: 2020-10-26 09:10:02 UTC
