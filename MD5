@@ -1,7 +1,7 @@
-2f5dc1feb548e411e376f9924684eea3 *DESCRIPTION
+32063d99e2f849664720d7c1f71550c2 *DESCRIPTION
 8b320e92c5b6e722641356f9e9de2ca5 *LICENSE
-9df816c0b9819da4e033dd13c0d4432f *NAMESPACE
-19b213477a6bd508d5c590d2ec1fa4bc *NEWS.md
+327e8a160101a3da7da7a90099a26395 *NAMESPACE
+e97c4a9f40347f42a28eb65caf30be52 *NEWS.md
 32c5e5c187a575b296d4321229e538f4 *R/annual_recruitment.R
 a08c9f3e3696e2d31ebcf79097824c57 *R/asdataframe.R
 d88939c6adf97c5f3b27fae3dfbc167d *R/assess_form_variable_completeness.R
@@ -10,12 +10,12 @@ d88939c6adf97c5f3b27fae3dfbc167d *R/assess_form_variable_completeness.R
 4ab0fc3ba141e63857b4b76145737f28 *R/completeness.R
 0ce0f902f2a2766491dd43d2cea69ea5 *R/dates_secuTrial.R
 df712adaf6b498c4d1da0be16fa1240c *R/diff_secuTrial.R
-5fe375fda2c429639f71557664a9ab5d *R/factorize.R
+542d7f0c359769e440032eadc0e75a5b *R/factorize.R
 d226781fde96700e64f1993e4a2abccf *R/get.R
 9cd3a788d0877f5229fb857d42b987b6 *R/id_conversions.R
 cb2ec7265277e80bb327f180e10bf1cb *R/internals.R
 70812b25820eb05e9be27c6d0e235858 *R/labels_secuTrial.R
-ae2e7e32582cd711a584f0dbfe707ee7 *R/links_secuTrial.R
+f1c752b3ba5f25e3a09d4e1d749317d4 *R/links_secuTrial.R
 e47a0d9eecbeb3ca32ee6aeb22644694 *R/plot_recruitment.R
 1c34774189bb1ce15c46fc31953359dd *R/read_export_options.R
 c4361890e12dbc0ac3d1656e9b33e7bc *R/read_export_table.R
@@ -28,12 +28,13 @@ f32f8ee4699a4edc56c20885187e7f7e *R/read_validation_overview.R
 520878bf63c17981a65f01a995f513f5 *R/subset.R
 aaa7a015230d4a17f07978dc942aacfa *R/visit_structure.R
 ac272a9a882684a88aa1dff3264d394a *R/write_secuTrial.R
-97c49bbf8ce5d2e272418b7518a807ea *README.md
+1761eb79f19aa94a5506eea6cd7cc9cd *README.md
 60e68d71b0a1fe160b8c436048cf7305 *build/vignette.rds
+5c90574afe7197107935c15174f93267 *inst/CITATION
 45868912eef893efe5c7096772f92105 *inst/COPYRIGHTS
-e7720e6cf57919f034b031628d05ed15 *inst/doc/secuTrialR-package-vignette.R
+0bb2d1bac4df53f222d0a6790d37280b *inst/doc/secuTrialR-package-vignette.R
 31ce1675a25946eb5039fed5a27aab9c *inst/doc/secuTrialR-package-vignette.Rmd
-f40c1ad236b99ff9a23991f8c444184b *inst/doc/secuTrialR-package-vignette.pdf
+2bfa389871170467e12f588a4fa47194 *inst/doc/secuTrialR-package-vignette.pdf
 5fea0829e28bfdc28024b1fe282e3c97 *inst/extdata/README_extdata.md
 c76f2097202088ca139db54056ec95cc *inst/extdata/dictionaries/dict_export_options_keys.csv
 ab1992c1408b2603eb28e85ae00f0dc4 *inst/extdata/dictionaries/dict_export_options_settings.csv
@@ -93,6 +94,7 @@ bb25b5af9549d47fa56318a6316d3dac *inst/extdata/sT_exports/lnames/s_export_CSV-xl
 36f4cbca401cb6dc90ae7ba9661b8f14 *inst/extdata/sT_exports/lnames/s_export_CSV-xls_CTU05_long_ref_miss_fr_utf8.zip
 b51458c1501943a5bb61decfbf129554 *inst/extdata/sT_exports/lnames/s_export_CSV-xls_CTU05_long_ref_miss_it_utf8.zip
 a4d017990f65f55e2335746602c88e8e *inst/extdata/sT_exports/lnames/s_export_CSV-xls_CTU05_long_ref_miss_pl_utf8.zip
+99491c8a2386adec24587572ae65e9fe *inst/extdata/sT_exports/lnames/s_export_CSV-xls_PLAYG_20201203-180930.zip
 dc2ab96a3c9215cc8b3934c5e3f48f1c *inst/extdata/sT_exports/snames/s_export_CSV-xls_CTU05_rt_short_miss_de_utf8.zip
 88c41921ca324337ca1bccd26f2d1309 *inst/extdata/sT_exports/snames/s_export_CSV-xls_CTU05_rt_short_miss_en_utf8.zip
 bb6310d52a6028ad118cf849e6ce6200 *inst/extdata/sT_exports/snames/s_export_CSV-xls_CTU05_rt_short_miss_es_utf8.zip
@@ -109,6 +111,7 @@ d7fe620d516cdb83d92191c0df0e9f63 *inst/extdata/sT_exports/snames/s_export_CSV-xl
 dbcf0de7608cab113fcd341c42d27c84 *inst/extdata/sT_exports/snames/s_export_CSV-xls_CTU05_short_ref_miss_en_utf8.zip
 082b979d4b603422b423ad56a7480732 *inst/extdata/sT_exports/snames/s_export_CSV-xls_CTU05_short_ref_miss_it_utf8.zip
 70465dae290bbf2178c5b6c293b598e3 *inst/extdata/sT_exports/snames/s_export_CSV-xls_CTU05_short_ref_noid_miss_en_utf8.zip
+c42826d7d856952e56f56a421b8fc568 *inst/extdata/sT_exports/snames/s_export_CSV-xls_PLAYG_20201204-122705.zip
 5de6a46025f58f4ff080b7cf6169d28e *inst/extdata/sT_exports/subset/s_export_CSV-xls_CTU05_long_Insel-USB_en.zip
 be3d3a870c846e44bca6106ca6f94f0c *inst/extdata/sT_exports/subset/s_export_CSV-xls_CTU05_long_all-info_en.zip
 37a7a44e0135a23a5e84549dd126340b *inst/extdata/sT_exports/subset/s_export_CSV-xls_CTU05_short_Insel-USB_en.zip
@@ -145,7 +148,7 @@ fe77c586de78d9ba388733aac3c834c5 *tests/testthat/test-dates_secutrial.R
 227936242ea15bee2ea38948f896f5c1 *tests/testthat/test-diff_secuTrial.R
 ef528cfdcaf5c8739e1adaa956194c21 *tests/testthat/test-encoding.R
 a08320fb1abc252202afb4c5553c4b41 *tests/testthat/test-export_options_warnings.R
-cfdf0fb3fcc6a27fc893474a12f39a58 *tests/testthat/test-factorize_secutrial.R
+fa78f72ae7029f39a02d47f415a344ef *tests/testthat/test-factorize_secutrial.R
 a707199bebd322b5d059ea70e5db75a0 *tests/testthat/test-get.R
 28e76b5eaefd959cec0a0c43c22b3fea *tests/testthat/test-id_conversion.R
 bc113a2a4fa385c63099f9bb2ae0b1a2 *tests/testthat/test-internal_functions.R
@@ -167,4 +170,3 @@ ffbc5bff810ab475e2b961cf5d7f54fc *tests/testthat/test-version_diff.R
 7d41748be2b2b59452c1d59d72cc74a1 *tests/testthat/test-visit_structure.R
 b614125a411896485b926f46af9a2c71 *tests/testthat/test-write_secuTrial.R
 31ce1675a25946eb5039fed5a27aab9c *vignettes/secuTrialR-package-vignette.Rmd
-af54e76fe3fe7f42cfd65ad150099b6b *vignettes/secuTrialR-package-vignette.html
