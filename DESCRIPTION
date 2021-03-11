@@ -2,16 +2,16 @@ Package: secuTrialR
 Type: Package
 Title: Handling of Data from the Clinical Data Management System
         'secuTrial'
-Version: 1.0.8
+Version: 1.0.9
 Authors@R: 
-    c(person(given = "Patrick R.",
-             family = "Wright",
-             role = c("cre", "aut", "cph"),
-             email = "patrick.wright@usb.ch"),
-      person(given = "Alan G.",
+    c(person(given = "Alan G.",
              family = "Haynes",
-             role = c("aut", "cph"),
+             role = c("cre", "aut", "cph"),
              email = "alan.haynes@ctu.unibe.ch"),
+      person(given = "Patrick R.",
+             family = "Wright",
+             role = c("aut", "cph"),
+             email = "patrick.wright@usb.ch"),
       person(given = "Milica",
              family = "Markovic",
              role = c("aut", "cph"),
@@ -27,7 +27,7 @@ Authors@R:
              role = c("com"),
              email = "pascal.benkert@usb.ch")
              )
-Maintainer: Patrick R. Wright <patrick.wright@usb.ch>
+Maintainer: Alan G. Haynes <alan.haynes@ctu.unibe.ch>
 Description: Seamless and standardized interaction with data
     exported from the clinical data management system (CDMS)
     'secuTrial'<https://www.secutrial.com>.
@@ -44,12 +44,12 @@ VignetteBuilder: knitr
 URL: https://github.com/SwissClinicalTrialOrganisation/secuTrialR
 BugReports: https://github.com/SwissClinicalTrialOrganisation/secuTrialR/issues
 NeedsCompilation: no
-Packaged: 2020-12-07 13:36:49 UTC; wrightp
-Author: Patrick R. Wright [cre, aut, cph],
-  Alan G. Haynes [aut, cph],
+Packaged: 2021-03-10 16:45:57 UTC; wrightp
+Author: Alan G. Haynes [cre, aut, cph],
+  Patrick R. Wright [aut, cph],
   Milica Markovic [aut, cph],
   Gilles Dutilh [ctb],
   Armando Lenz [ctb],
   Pascal Benkert [com]
 Repository: CRAN
-Date/Publication: 2020-12-07 14:30:02 UTC
+Date/Publication: 2021-03-11 07:30:03 UTC

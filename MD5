@@ -1,7 +1,7 @@
-32063d99e2f849664720d7c1f71550c2 *DESCRIPTION
+df238eb1ac278a9c72456557468456c9 *DESCRIPTION
 8b320e92c5b6e722641356f9e9de2ca5 *LICENSE
 327e8a160101a3da7da7a90099a26395 *NAMESPACE
-e97c4a9f40347f42a28eb65caf30be52 *NEWS.md
+c5886fdef70a2ea6e041e1c388dcc251 *NEWS.md
 32c5e5c187a575b296d4321229e538f4 *R/annual_recruitment.R
 a08c9f3e3696e2d31ebcf79097824c57 *R/asdataframe.R
 d88939c6adf97c5f3b27fae3dfbc167d *R/assess_form_variable_completeness.R
@@ -28,13 +28,13 @@ f32f8ee4699a4edc56c20885187e7f7e *R/read_validation_overview.R
 520878bf63c17981a65f01a995f513f5 *R/subset.R
 aaa7a015230d4a17f07978dc942aacfa *R/visit_structure.R
 ac272a9a882684a88aa1dff3264d394a *R/write_secuTrial.R
-1761eb79f19aa94a5506eea6cd7cc9cd *README.md
+4aa62e7f6ccc47c35ee806d0a8a5c308 *README.md
 60e68d71b0a1fe160b8c436048cf7305 *build/vignette.rds
 5c90574afe7197107935c15174f93267 *inst/CITATION
 45868912eef893efe5c7096772f92105 *inst/COPYRIGHTS
 0bb2d1bac4df53f222d0a6790d37280b *inst/doc/secuTrialR-package-vignette.R
 31ce1675a25946eb5039fed5a27aab9c *inst/doc/secuTrialR-package-vignette.Rmd
-2bfa389871170467e12f588a4fa47194 *inst/doc/secuTrialR-package-vignette.pdf
+f40c1ad236b99ff9a23991f8c444184b *inst/doc/secuTrialR-package-vignette.pdf
 5fea0829e28bfdc28024b1fe282e3c97 *inst/extdata/README_extdata.md
 c76f2097202088ca139db54056ec95cc *inst/extdata/dictionaries/dict_export_options_keys.csv
 ab1992c1408b2603eb28e85ae00f0dc4 *inst/extdata/dictionaries/dict_export_options_settings.csv
@@ -170,3 +170,4 @@ ffbc5bff810ab475e2b961cf5d7f54fc *tests/testthat/test-version_diff.R
 7d41748be2b2b59452c1d59d72cc74a1 *tests/testthat/test-visit_structure.R
 b614125a411896485b926f46af9a2c71 *tests/testthat/test-write_secuTrial.R
 31ce1675a25946eb5039fed5a27aab9c *vignettes/secuTrialR-package-vignette.Rmd
+3d7d7d9f0c6c38405ab0578373e89329 *vignettes/secuTrialR-package-vignette.html
