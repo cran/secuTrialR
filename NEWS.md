@@ -1,3 +1,22 @@
+# secuTrialR 1.1.1
+* fix CRAN notes - remove codecov badge, check class via inherits
+
+# secuTrialR 1.1.0
+* warning regarding overwritten `pat_id` variable 
+
+# secuTrialR 1.0.12
+* adapt `as.data.frame.secuTrialData()` to allow named character vectors as option `data.frames` to specify custom names for data.frames (#250) 
+
+# secuTrialR 1.0.11
+* recommendation to export with short names (#238)
+* addition of arguments in `read_export_table` etc allowing passing other options to `read.table` (#240)
+* addition of `dictionary_secuTrial` function for easy access a data dictionary (#241)
+* `formtablename` added to the output of `visit_structure` for better reference between the table names and labels (#242)
+* addition of `export_date` and `export_datetime` for easier access to the export date (and time) (#246)
+
+# secuTrialR 1.0.10
+* adapt `read_export_options()` to work with exports from new secuTrial version (6.1.2.5 - 6.3.2.5) (#245)
+
 # secuTrialR 1.0.9
 * transferred the `Maintainer` tag to `Alan Haynes`
 

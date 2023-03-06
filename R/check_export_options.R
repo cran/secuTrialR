@@ -28,7 +28,7 @@
 #'
 #' secuTrialR:::check_export_options(sT_export)
 check_export_options <- function(dat) {
-  if (class(dat) != "secuTrialdata") {
+  if (!inherits(dat, "secuTrialdata")) {
     stop("check_export_options requires objects of the class 'secuTrialdata' as input.")
   }
   eo <- dat$export_options
@@ -65,6 +65,9 @@ check_export_options <- function(dat) {
   }
   if (! eo$structure) {
     warn_components <- paste0(warn_components, "Structure information is not part of the export.\n")
+  }
+  if(! eo$short_names) {
+    warn_components <- paste0(warn_components, "Short names was not selected.\n")
   }
 
   if (str_length(warn_components)) {
