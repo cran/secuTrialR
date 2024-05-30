@@ -61,8 +61,10 @@ test_that("All data tables loaded.", {
 # check dimensions of loaded data
 test_that("Data dimensions are correct.", {
   # dim CTU05
-  # 62 because everything is available
-  expect_equal(dim(sT_export_all_info$baseline), c(17, 62))
+  # newer exports contain additonal mnplang: 62 + 1 = 63
+  # 63 because everything is available
+  expect_equal(dim(sT_export_all_info$baseline), c(17, 63))
+  # older exports without mnplang: 62
   # 61 because pat_id column has not been added
   expect_equal(dim(sT_export_no_add_id$baseline), c(17, 61))
   # 61 because centre column has not been added

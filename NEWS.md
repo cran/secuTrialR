@@ -1,3 +1,26 @@
+# secuTrialR 1.3.2 and 1.3.3
+
+* clear some notes and warnings in preparation for CRAN submission (#265)
+
+# secuTrialR 1.3.1
+
+* `build_secuTrial_url()` now has optional parameter `prefix` with default `"apps/WebObjects/"`. (#263)
+
+# secuTrialR 1.3.0
+
+* bug fix to read escaped enclosure characters in free text items, e.g. `\"` (#220, #261)
+  * `read_export_options()` now also reads enclosure character from header
+  * `.print.secuTrialoptions()` now also prints enclosure character. Quote and Tabulator are now printed as `'\"'` and `'\t'` rather than `'"'` and `'    '`. 
+  * `read_export_table()` now uses `readr::read_delim()` with options `escape_backslash = TRUE` and `quote = export_options$quote`
+* warning for ISO-8859 encoding moved from `read_export_table()` to `read_secuTrial_raw()` (one warning per export file instead of several warnings for each table)
+* `read_export_options()` now reads only the first 10 lines to find the encoding. Reading all lines would fail if the export options were ISO-8859 encoded and contained 'problematic' characaters, e.g. in center names.
+* Removed `encoding` option in `plot_recruitment()`: Not needed here, as centres are read with correct encoding in `read_secuTrial_raw()` and stored in the secuTrialR object.
+
+# secuTrialR 1.2.0
+
+* `write_secuTrial()` no longer allows `format = "sas"` due to deprecation of write_sas in `haven` (version 2.5.2).
+* `read_secuTrial_raw` now produces a more explicit warning when ISO-8859 encoding is used. Recent changes in R seem to have reduced compatibility with this encoding.
+
 # secuTrialR 1.1.1
 * fix CRAN notes - remove codecov badge, check class via inherits
 

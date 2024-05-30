@@ -11,6 +11,7 @@
 #' \itemize{
 #' \item server id is: \strong{server.secutrial.com}
 #' \item instance id is: \strong{ST21-setup-DataCapture}
+#' \item url prefix is: \strong{apps/WebObjects/}
 #' \item you can find the customer id at the end of the link i.e \strong{TES}
 #'
 #'       Alternatively it can be found in the
@@ -36,6 +37,7 @@
 #' @param customer (optional) string containing secuTrial customer label
 #' @param projid (optional) string containing secuTrial project identifier
 #' @param docid (optional) secuTrial document/form identifer
+#' @param prefix (optional) string containing the URL prefix to the WebObjects application (default: "apps/WebObjects/")
 #' @return string containing a URL to desired secuTrial page. Currently we provide no
 #'         guarantee that the returned URL is valid.
 #' @export
@@ -68,7 +70,7 @@
 #' # make several links with all docids
 #' build_secuTrial_url(server, instance, customer, project, docids)
 #'
-build_secuTrial_url <- function(server, instance = NA, customer = NA, projid = NA, docid = NA) {
+build_secuTrial_url <- function(server, instance = NA, customer = NA, projid = NA, docid = NA, prefix = "apps/WebObjects/") {
   if (all(!is.na(docid)) & (is.na(projid) | is.na(customer) | is.na(instance))) {
     warning("'projid', 'customer' and 'instance' must all be provided with 'docid'")
   } else if (!is.na(projid) & (is.na(customer) | is.na(instance))) {
@@ -87,7 +89,7 @@ build_secuTrial_url <- function(server, instance = NA, customer = NA, projid = N
   sT_url <- server
   # check what info is availalbe and compose with what you have
   if (!is.na(instance)) {
-    sT_url <- paste0(sT_url, "apps/WebObjects/", instance)
+    sT_url <- paste0(sT_url, prefix, instance)
     if (!is.na(customer)) {
       sT_url <- paste0(sT_url, ".woa/wa/choose?customer=", customer)
       if (!is.na(projid)) {

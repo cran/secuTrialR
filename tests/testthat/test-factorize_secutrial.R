@@ -107,7 +107,7 @@ test_that("Levels in meta variables", {
 
 # factorization of reprtitions (subforms)
 test_that("Factorization of repetitions working.", {
-  expect_true(all_equal(fact_ctu05_s$esurgeries, fact_ctu05_l$emnpctu05surgeries))
+  expect_true(all.equal(fact_ctu05_s$esurgeries, fact_ctu05_l$emnpctu05surgeries))
 })
 
 

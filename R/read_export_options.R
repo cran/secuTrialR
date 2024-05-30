@@ -36,7 +36,7 @@ read_export_options <- function(data_dir) {
   }
 
   # recode if there is ISO encoding
-  if (length(grep(">ISO-8859-", parsed_export))) {
+  if (length(grep("ISO-8859-", parsed_export[1:10]))) {
     Encoding(parsed_export) <- "latin1"
   }
 
@@ -164,7 +164,7 @@ read_export_options <- function(data_dir) {
     meta_available[entry] <- .construct_metaname(entry, meta_names, file_tag, file_extension) %in% files$Name
   }
 
-  # find form data separator ----
+  # find form data separator and enclosure ----
   if (is_zip) {
     file_con <- unz(data_dir, files$Name[!grepl("html$", files$Name)][1])
     header <- readLines(file_con, 1)
@@ -172,6 +172,8 @@ read_export_options <- function(data_dir) {
   } else if (!is_zip) {
     header <- readLines(file.path(data_dir, files$Name[!grepl("html$", files$Name)][1]), 1)
   }
+  quote <- substr(header, 1, 1)
+  header <- gsub(quote, "" , header)
   if (grepl(",", header)) {
     sep <- ","
   } else if (grepl("'", header)) {
@@ -182,6 +184,8 @@ read_export_options <- function(data_dir) {
     sep <- "\t"
   } else if (grepl("@", header)) {
     sep <- "@"
+  } else if (grepl("\"", header)) {
+    sep <- "\""
   } else {
     stop("Error: Field separator could not be retrieved.")
     return(NULL)
@@ -254,6 +258,7 @@ read_export_options <- function(data_dir) {
 
   # return object ----
   study_options <- list(sep = sep,
+                        quote = quote,
                         date_format = date_format,
                         datetime_format = datetime_format,
                         date_format_meta = date_format_meta,
@@ -305,6 +310,12 @@ print.secuTrialoptions <- function(x, ...) {
   if (x$short_names) cat("Exported with short names \n")
   if (!x$short_names) cat(paste("File names appended with:", x$file_end, "\n"))
   cat(paste("File extension:", x$extension, "\n"))
+  # Print " and tab with escape char
+  if(grepl("\"", x$quote)) x$quote <- "\\\""
+  if(grepl("\t", x$quote)) x$quote <- "\\t"
+  if(grepl("\"", x$sep)) x$sep <- "\\\""
+  if(grepl("\t", x$sep)) x$sep <- "\\t"
+  cat(paste0("Enclosure: '", x$quote, "'\n"))
   cat(paste0("Seperator: '", x$sep, "'\n"))
   cat(paste(length(x$all_files), "files exported\n"))
   cat(paste("  including", sum(unlist(x$meta_available)), "metadata tables\n"))

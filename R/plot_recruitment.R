@@ -40,7 +40,7 @@ plot_recruitment <- function(x, return_data = FALSE, show_centres = TRUE, cex = 
 
     ctr <- x[[x$export_options$meta_names$centres]]
     cn <- x[[x$export_options$meta_names$casenodes]]
-    dates_centre_ids <- .prep_line_data(cn = cn, ctr = ctr, encoding = x$export_options$encoding)
+    dates_centre_ids <- .prep_line_data(cn = cn, ctr = ctr)
     # for return_data
     plot_data <- list(dates_centre_ids)
     # legend
@@ -67,8 +67,7 @@ plot_recruitment <- function(x, return_data = FALSE, show_centres = TRUE, cex = 
           col_idx <- col_idx + 1
           next
         }
-        dates_centre_ids_curr_ctr <- .prep_line_data(cn = curr_ctr_cn, ctr = ctr,
-                                                     encoding = x$export_options$encoding)
+        dates_centre_ids_curr_ctr <- .prep_line_data(cn = curr_ctr_cn, ctr = ctr)
         legend_names <- c(legend_names, paste0(gsub(unique(dates_centre_ids_curr_ctr$centre_name),
                                                     pattern = rm_regex, replacement = ""),
                                                " (n=",
@@ -99,7 +98,7 @@ plot_recruitment <- function(x, return_data = FALSE, show_centres = TRUE, cex = 
 # helper function to prep the data for the line plot
 # take a casenodes (cn) and centres (ctr) data frame from the
 # secuTrial export
-.prep_line_data <- function(cn, ctr, encoding = "UTF-8") {
+.prep_line_data <- function(cn, ctr) {
   dates_centre_ids <- cn[, c("mnpvisstartdate", "mnpctrid")]
   # set to "Date" class
   dates_centre_ids$mnpvisstartdate <- as.Date(dates_centre_ids$mnpvisstartdate)
@@ -110,8 +109,5 @@ plot_recruitment <- function(x, return_data = FALSE, show_centres = TRUE, cex = 
   names(dates_centre_ids) <- c("date", "centre_id", "pat_count")
   # translate centre names
   dates_centre_ids$centre_name <- ctr$mnpctrname[match(dates_centre_ids$centre_id, ctr$mnpctrid)]
-  if (encoding != "UTF-8") {
-    Encoding(dates_centre_ids$centre_name) <- "latin1"
-  }
   return(dates_centre_ids)
 }

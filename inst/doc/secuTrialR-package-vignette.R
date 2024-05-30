@@ -1,4 +1,4 @@
-## ---- include = FALSE---------------------------------------------------------
+## ----include = FALSE----------------------------------------------------------
 # needed so that the as.data.frame part of the vignette
 # does not need a restart of the session everytime the
 # vignette is built
@@ -8,10 +8,10 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  install.packages("secuTrialR", dependencies = TRUE)
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  # install
 #  devtools::install_github("SwissClinicalTrialOrganisation/secuTrialR")
 
@@ -99,10 +99,10 @@ annual_recruitment(ctu05_data)
 ## -----------------------------------------------------------------------------
 annual_recruitment(ctu05_data, rm_regex = "\\(.*\\)$")
 
-## ---- fig.height = 3.6, fig.width = 8-----------------------------------------
+## ----fig.height = 3.6, fig.width = 8------------------------------------------
 plot_recruitment(ctu05_data, cex = 1.2, rm_regex = "\\(.*\\)$")
 
-## ---- fig.height = 3.9, fig.width = 3.9---------------------------------------
+## ----fig.height = 3.9, fig.width = 3.9----------------------------------------
 vs <- visit_structure(ctu05_data)
 plot(vs)
 
@@ -115,7 +115,7 @@ fsc <- form_status_counts(ctu05_data)
 # show the top
 head(fsc)
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  links_secuTrial(ctu05_data)
 
 ## -----------------------------------------------------------------------------
@@ -146,7 +146,7 @@ ctu06_v2 <- read_secuTrial(system.file("extdata", "sT_exports", "change_tracking
 diff_secuTrial(ctu06_v1, ctu06_v2)
 
 
-## ---- eval = FALSE------------------------------------------------------------
+## ----eval = FALSE-------------------------------------------------------------
 #  # retrieve path to a temporary directory
 #  tdir <- tempdir()
 #  # write spss
@@ -175,13 +175,13 @@ ctu05_data_berlin$ctr
 # all centres remain even though all three participant ids are from Bern
 ctu05_data_pids$ctr
 
-## ---- fig.height = 3.8, fig.width = 8-----------------------------------------
+## ----fig.height = 3.8, fig.width = 8------------------------------------------
 # keep only Bern
 ctu05_data_bern <- subset_secuTrial(ctu05_data, centre = "Inselspital Bern (RPACK)")
 # plot
 plot_recruitment(ctu05_data_bern)
 
-## ---- fig.height = 3.8, fig.width = 8-----------------------------------------
+## ----fig.height = 3.8, fig.width = 8------------------------------------------
 # keep only Bern and Berlin
 ctu05_data_bern_berlin <- subset_secuTrial(ctu05_data,
                                            centre = c("Inselspital Bern (RPACK)",
@@ -215,7 +215,7 @@ as.data.frame(ctu05_data, envir = env)
 ## -----------------------------------------------------------------------------
 ls(env)
 
-## ---- echo = FALSE, results = TRUE--------------------------------------------
+## ----echo = FALSE, results = TRUE---------------------------------------------
 
 # incomplete dates
 warning(
@@ -227,13 +227,13 @@ This is likely due to incomplete date entries."
 )
 
 
-## ---- echo = FALSE, results = TRUE--------------------------------------------
+## ----echo = FALSE, results = TRUE---------------------------------------------
 # duplicate factors
 warning(
 "In factorize_secuTrial.data.frame(curr_form_data, cl = object$cl,  :
 Duplicate values found during factorization of a_variable_name")
 
-## ---- echo = FALSE, results = TRUE--------------------------------------------
+## ----echo = FALSE, results = TRUE---------------------------------------------
 # duplicate labels
 warning(
 "In label_secuTrial.secuTrialdata(d) :

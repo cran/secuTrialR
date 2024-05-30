@@ -58,14 +58,15 @@ factorize_secuTrial.secuTrialdata <- function(object, ...) {
 # nolint start
 # #' The data.frame method is used on the individual datasets within the \code{secuTrialdata} object, and relies on \code{cl}
 # #' @rdname factorize
-# #' @param data a \code{data.frame}, usually from within a \code{secuTrialdata} object
+# #' @param object a \code{data.frame}, usually from within a \code{secuTrialdata} object
 # #' @param cl a \code{data.frame}, usually taken from a \code{secuTrialdata} object, containing at least three variables - 1) \code{column} containing information on which form and variable is to be factorized (formatted as form.variable); 2) \code{code} containing the options that the variable can take as a number; 3) \code{value} contains the text relating to the \code{code} number
 # #' @param form which form you are currently working on (used for filtering \code{cl})
 # #'
 # #' @examples
 # # data.frame method
 # nolint end
-factorize_secuTrial.data.frame <- function(data, cl, form, items, short_names) {
+#' @export
+factorize_secuTrial.data.frame <- function(object, cl, form, items, short_names, ...) {
   # character reformatting
   if (!is.character(cl$column)) cl$column <- as.character(cl$column)
   if (!is.character(items$ffcolname)) items$ffcolname <- as.character(items$ffcolname)
@@ -85,11 +86,11 @@ factorize_secuTrial.data.frame <- function(data, cl, form, items, short_names) {
   w <- cl$column %in% lookups$lookuptable
   cl$var[w] <- lookups$ffcolname[match(cl$column[w], lookups$lookuptable)]
 
-  for (name in names(data)[names(data) %in% cl$var]) {
+  for (name in names(object)[names(object) %in% cl$var]) {
     # construct search regex
     # condition 1: only subforms (repetitions) have a "mnpsubdocid" column
     # condition 2: this is only appropriate if short_names == TRUE
-    if ("mnpsubdocid" %in% names(data) & short_names) {
+    if ("mnpsubdocid" %in% names(object) & short_names) {
       adjusted_form <- gsub(form, pattern = "^e", replacement = "^e.+")
       regex_cl <- paste0(adjusted_form, ".", name, "$")
     } else { # non-repetitions (regular case)
@@ -97,7 +98,7 @@ factorize_secuTrial.data.frame <- function(data, cl, form, items, short_names) {
     }
     # lookup for non-meta variables
     lookup <- cl[grepl(regex_cl, cl$column) |
-                   (cl$var %in% names(data) & cl$var %in% lookups$ffcolname), ]
+                   (cl$var %in% names(object) & cl$var %in% lookups$ffcolname), ]
 
     # exception for meta variables
     if (name %in% meta_var_names) {
@@ -124,7 +125,7 @@ factorize_secuTrial.data.frame <- function(data, cl, form, items, short_names) {
     }
 
     # this is a fix for Issue #116 on github
-    # factorize on same variable name in different forms with different data types
+    # factorize on same variable name in different forms with different object types
     if (nrow(lookup) == 0) {
       next
     }
@@ -133,11 +134,11 @@ factorize_secuTrial.data.frame <- function(data, cl, form, items, short_names) {
     # Radiobutton reset option interferes with factorize_secuTrial()
     lookup <- lookup[which(! is.na(lookup$code)), ]
 
-    data[, paste0(name, ".factor")] <- factorize_secuTrial(data[, name], lookup)
-    data <- .move_column_after(data, paste0(name, ".factor"), name)
+    object[, paste0(name, ".factor")] <- factorize_secuTrial(object[, name], lookup)
+    object <- .move_column_after(object, paste0(name, ".factor"), name)
     # check for conversion of all else warn // this is expected to never happen
-    if (length(which(is.na(data[, paste0(name, ".factor")]))) >
-        length(which(is.na(data[, name]))) &
+    if (length(which(is.na(object[, paste0(name, ".factor")]))) >
+        length(which(is.na(object[, name]))) &
         # exclude audit trail
         # note: this will also exclude forms with a name starting with
         #       "at" if shortnames is exported
@@ -149,38 +150,41 @@ factorize_secuTrial.data.frame <- function(data, cl, form, items, short_names) {
                      "'\n  Has a 'Take value from ...' rule been implemented for '", name, "'?"))
     }
   }
-  return(data)
+  return(object)
 }
 
 # nolint start
 # #' Methods for individual variables rely on a lookup table with variables code and value. They are basically just wrappers for \code{factor(...)}.
 # #' @rdname factorize
-# #' @param var a variable
-# #' @param lookup a restricted version of cl (filtered based on \code{form}), containing only the rows relevant for \code{var}
+# #' @param object a variable
+# #' @param lookup a restricted version of cl (filtered based on \code{form}), containing only the rows relevant for \code{object}
 # #'
 # #' @examples
 # nolint end
-factorize_secuTrial.numeric <- function(var, lookup) {
+#' @export
+factorize_secuTrial.numeric <- function(object, lookup, ...) {
   lookup <- unique(lookup)
-  f <- factor(var, lookup$code, lookup$value)
-  if (!is.null(label(var))) label(f) <- label(var)
-  if (!is.null(units(var))) units(f) <- units(var)
+  f <- factor(object, lookup$code, lookup$value)
+  if (!is.null(label(object))) label(f) <- label(object)
+  if (!is.null(units(object))) units(f) <- units(object)
   f
 }
 
 # #' @rdname factorize
-factorize_secuTrial.logical <- function(var, lookup) {
-  var <- as.numeric(var)
-  f <- factor(var, lookup$code, lookup$value)
-  if (!is.null(label(var))) label(f) <- label(var)
-  if (!is.null(units(var))) units(f) <- units(var)
+#' @export
+factorize_secuTrial.logical <- function(object, lookup, ...) {
+  object <- as.numeric(object)
+  f <- factor(object, lookup$code, lookup$value)
+  if (!is.null(label(object))) label(f) <- label(object)
+  if (!is.null(units(object))) units(f) <- units(object)
   f
 }
 
 # #' @rdname factorize
-factorize_secuTrial.character <- function(var, lookup) {
-  f <- factor(var, lookup$value, lookup$value)
-  if (!is.null(label(var))) label(f) <- label(var)
-  if (!is.null(units(var))) units(f) <- units(var)
+#' @export
+factorize_secuTrial.character <- function(object, lookup, ...) {
+  f <- factor(object, lookup$value, lookup$value)
+  if (!is.null(label(object))) label(f) <- label(object)
+  if (!is.null(units(object))) units(f) <- units(object)
   f
 }

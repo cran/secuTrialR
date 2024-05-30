@@ -29,8 +29,18 @@ dup_meta <- read_export_options(system.file("extdata", "sT_exports", "lnames",
                                             package = "secuTrialR"))
 
 # ISO-8859-15
-exp_opt_tes05_iso <- read_export_options(system.file("extdata", "sT_exports", "encodings",
+exp_opt_tes05_iso <- suppressWarnings(read_export_options(system.file("extdata", "sT_exports", "encodings",
                                                      "s_export_CSV-xls_TES05_short_ref_en_iso8859-15.zip",
+                                                     package = "secuTrialR")))
+
+# Enclosure = ' and Seperator = ;
+exp_opt_enclosure1 <-read_export_options(system.file("extdata", "sT_exports", "exp_opt",
+                                                     "s_export_CSV_CTU05_20240513-124040.zip",
+                                                     package = "secuTrialR"))
+
+# Enclosure = , and Seperator = "
+exp_opt_enclosure2 <-read_export_options(system.file("extdata", "sT_exports", "exp_opt",
+                                                     "s_export_CSV_CTU05_20240513-124102.zip",
                                                      package = "secuTrialR"))
 
 # test encoding
@@ -95,11 +105,11 @@ captured_print <- capture.output(print(sT_export$export_options))
 test_that("Print export options working.", {
   expect_equal(captured_print[1], "secuTrial version: 5.3.4.6 ")
   expect_equal(captured_print[2], "Time of export on server: 25.02.2019 - 15:14:27 (CET) ")
-  expect_equal(captured_print[6], "Seperator: '\t'")
-  expect_equal(captured_print[7], "14 files exported")
-  expect_equal(captured_print[9], "Reference values not exported - factorize not possible")
+  expect_equal(captured_print[6], "Enclosure: '\\\"'")
+  expect_equal(captured_print[7], "Seperator: '\\t'")
+  expect_equal(captured_print[8], "14 files exported")
+  expect_equal(captured_print[10], "Reference values not exported - factorize not possible")
 })
-
 
 sT_export2 <- read_secuTrial_raw(data_dir = system.file("extdata", "sT_exports", "snames",
                                                            "s_export_CSV-xls_CTU05_short_miss_en_utf8.zip",
@@ -186,4 +196,14 @@ test_that("Hidden fields successfully parsed", {
 test_that("Structure fields successfully parsed", {
   expect_false(sT_export_only_col_names$export_options$structure)
   expect_true(exp_opt_tes05_iso$structure)
+})
+
+# test enclosure and seperator
+test_that("Enclosure and separator as expected", {
+  expect_equal(export_options_regular_short$quote, "\"")
+  expect_equal(export_options_regular_short$sep, "\t")
+  expect_equal(exp_opt_enclosure1$quote, "'")
+  expect_equal(exp_opt_enclosure1$sep, ";")
+  expect_equal(exp_opt_enclosure2$quote, ",")
+  expect_equal(exp_opt_enclosure2$sep, "\"")
 })

@@ -60,6 +60,12 @@ read_secuTrial_raw <- function(data_dir, ...) {
                 "'Column names' activated."))
   }
 
+  # warn if encoding = ISO-8859-1 or ISO-8859-15 
+  if (grepl("ISO-8859-1", export_options$encoding)) {
+    warning("ISO-8859-1 encoding detected. Strings may not be interpreted correctly")
+  }
+
+
   # init return list
   return_list <- list(export_options = export_options)
 

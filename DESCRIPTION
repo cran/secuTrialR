@@ -2,12 +2,12 @@ Package: secuTrialR
 Type: Package
 Title: Handling of Data from the Clinical Data Management System
         'secuTrial'
-Version: 1.1.1
+Version: 1.3.3
 Authors@R: 
     c(person(given = "Alan G.",
              family = "Haynes",
              role = c("cre", "aut", "cph"),
-             email = "alan.haynes@ctu.unibe.ch"),
+             email = "alan.haynes@unibe.ch"),
       person(given = "Patrick R.",
              family = "Wright",
              role = c("aut", "cph"),
@@ -36,7 +36,7 @@ Authors@R:
              family = "Sluka",
              role = c("ctb"))
              )
-Maintainer: Alan G. Haynes <alan.haynes@ctu.unibe.ch>
+Maintainer: Alan G. Haynes <alan.haynes@unibe.ch>
 Description: Seamless and standardized interaction with data
     exported from the clinical data management system (CDMS)
     'secuTrial'<https://www.secutrial.com>.
@@ -46,13 +46,13 @@ Imports: haven (>= 2.2.0), readr, readxl, stringr, tibble, magrittr,
         purrr, tidyr, dplyr, rlang, lubridate
 License: MIT + file LICENSE
 Encoding: UTF-8
-RoxygenNote: 7.2.2
+RoxygenNote: 7.3.1
 Suggests: knitr, lintr, rmarkdown, testthat, tufte, tcltk, igraph
 VignetteBuilder: knitr
 URL: https://github.com/SwissClinicalTrialOrganisation/secuTrialR
 BugReports: https://github.com/SwissClinicalTrialOrganisation/secuTrialR/issues
 NeedsCompilation: no
-Packaged: 2023-03-02 09:43:06 UTC; haynes
+Packaged: 2024-05-30 09:19:00 UTC; haynes
 Author: Alan G. Haynes [cre, aut, cph],
   Patrick R. Wright [aut, cph],
   Milica Markovic [aut, cph],
@@ -63,4 +63,4 @@ Author: Alan G. Haynes [cre, aut, cph],
   Pia Neuschwander [ctb],
   Constantin Sluka [ctb]
 Repository: CRAN
-Date/Publication: 2023-03-06 09:20:02 UTC
+Date/Publication: 2024-05-30 15:20:02 UTC

@@ -148,20 +148,21 @@ label_secuTrial.secuTrialdata <- function(object, ...) {
   return(object)
 }
 
-label_secuTrial.data.frame <- function(data, it) {
-  it <- it[it$ffcolname %in% names(data), ]
-  for (i in names(data)[names(data) %in% it$ffcolname]) {
+#' @export
+label_secuTrial.data.frame <- function(object, it, ...) {
+  it <- it[it$ffcolname %in% names(object), ]
+  for (i in names(object)[names(object) %in% it$ffcolname]) {
     # variables can have the same name in different
     # forms, if this is not made unique() labels can contain
     # the same string several times which is not informative
     x <- unique(it$fflabel[it$ffcolname == i])
     u <- it$unit[it$ffcolname == i]
-    label(data[, i]) <- x
-    if (any(!is.na(u))) units(data[, i]) <- u
+    label(object[, i]) <- x
+    if (any(!is.na(u))) units(object[, i]) <- u
   }
-  label(data) <- it$formname[1]
+  label(object) <- it$formname[1]
 
-  return(data)
+  return(object)
 }
 
 #' @rdname labels_secuTrial

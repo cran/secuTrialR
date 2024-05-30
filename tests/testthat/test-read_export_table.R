@@ -130,6 +130,7 @@ test_that("Exceptions trigger as expected.", {
                                  visitplan_table = visitplan))
 })
 
+# test custom separator
 test_that("custom sep works", {
   expect_error(read_export_table(data_dir = system.file("extdata", "sT_exports", "BMD",
                                                         "s_export_CSV-xls_BMD_short_en_utf8",
@@ -138,4 +139,21 @@ test_that("custom sep works", {
                                  export_options = export_options_unzipped,
                                  is_meta_table = TRUE,
                                  sep = "\t"), NA)
+})
+
+
+ctu_quote_comma <- read_secuTrial_raw(data_dir = system.file("extdata", "sT_exports", "exp_opt",
+                                                             "s_export_CSV-xls_CTU05_all_info.zip",
+                                                             package = "secuTrialR"))
+ctu_single_semicolon <- read_secuTrial_raw(data_dir = system.file("extdata", "sT_exports", "exp_opt",
+                                                                  "s_export_CSV_CTU05_20240513-124040.zip",
+                                                                  package = "secuTrialR"))
+ctu_comma_quote <- read_secuTrial_raw(data_dir = system.file("extdata", "sT_exports", "exp_opt",
+                                                             "s_export_CSV_CTU05_20240513-124102.zip",
+                                                             package = "secuTrialR"))
+# test escape of special characters in freetext
+test_that("Special characters are escaped.",{
+  expect_equal(ctu_quote_comma$baseline$baseline_comment[17], "Let's \"test\" all @symbols one, two users may use;")
+  expect_equal(ctu_quote_comma$baseline$baseline_comment[17], ctu_single_semicolon$baseline$baseline_comment[17])
+  expect_equal(ctu_quote_comma$baseline$baseline_comment[17], ctu_comma_quote$baseline$baseline_comment[17])
 })

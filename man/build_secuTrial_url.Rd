@@ -9,7 +9,8 @@ build_secuTrial_url(
   instance = NA,
   customer = NA,
   projid = NA,
-  docid = NA
+  docid = NA,
+  prefix = "apps/WebObjects/"
 )
 }
 \arguments{
@@ -22,6 +23,8 @@ build_secuTrial_url(
 \item{projid}{(optional) string containing secuTrial project identifier}
 
 \item{docid}{(optional) secuTrial document/form identifer}
+
+\item{prefix}{(optional) string containing the URL prefix to the WebObjects application (default: "apps/WebObjects/")}
 }
 \value{
 string containing a URL to desired secuTrial page. Currently we provide no
@@ -40,6 +43,7 @@ you usually use to log in. For example in:
 \itemize{
 \item server id is: \strong{server.secutrial.com}
 \item instance id is: \strong{ST21-setup-DataCapture}
+\item url prefix is: \strong{apps/WebObjects/}
 \item you can find the customer id at the end of the link i.e \strong{TES}
 
       Alternatively it can be found in the

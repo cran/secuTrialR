@@ -69,10 +69,13 @@
 # }
 # nolint end
 #
+#' @importFrom utils type.convert
 read_export_table <- function(data_dir, file_name, export_options,
                               add_pat_id = TRUE, add_centre = TRUE, add_visitname = TRUE,
                               casenodes_table, centre_table, visitplan_table,
-                              is_meta_table = FALSE, sep = export_options$sep, ...) {
+                              is_meta_table = FALSE,
+                              sep = export_options$sep, quote = export_options$quote,
+                              ...) {
   ops <- options()
   on.exit(ops)
   options(stringsAsFactors = FALSE)
@@ -85,30 +88,40 @@ read_export_table <- function(data_dir, file_name, export_options,
 
   if (export_options$is_zip) {
     archive_con <- unz(data_dir, file_name)
-    loaded_table <- read.table(file = archive_con,
-                               header = TRUE,
-                               na.strings = export_options$na.strings,
-                               sep = sep,
-                               fill = TRUE,
-                               encoding = curr_encoding,
-                               ...)
+    table_lines <- readr::read_lines(archive_con, locale = readr::locale(encoding = curr_encoding))
   } else if (export_options$is_zip == FALSE) {
-    loaded_table <- read.table(file = paste0(data_dir, "/", file_name),
-                               header = TRUE,
-                               na.strings = export_options$na.strings,
-                               sep = sep,
-                               fill = TRUE,
-                               encoding = curr_encoding,
-                               ...)
+    table_lines <- readr::read_lines(paste0(data_dir, "/", file_name), locale = readr::locale(encoding = curr_encoding))
   } else {
     stop(paste0("Could not load table ", file_name))
   }
 
-  # in earlier secuTrial exports there was
-  # a last/empty column "X" which can be removed
-  if ("X" %in% names(loaded_table)) {
-    loaded_table <- loaded_table[, -ncol(loaded_table)]
+  # Some tables may be non-rectangular due to additional 
+  # empty cells at the end of some rows
+  # In such a case, fill rows to make table rectangular
+  # (analogous to fill = TRUE in read.table())
+  nsep <- sapply(table_lines, function(x) stringr::str_count(x, paste0(quote,sep,quote)), USE.NAMES = FALSE)
+  if (any(nsep) != max(nsep)) {
+    table_lines[nsep != max(nsep)] <- paste0(table_lines[nsep != max(nsep)], sep, quote, quote)
   }
+
+  loaded_table <- readr::read_delim(file = I(table_lines),
+                                    na = export_options$na.strings,
+                                    delim = sep,
+                                    quote = quote,
+                                    # do not attempt to change the names of any last/empty column
+                                    name_repair = "minimal",
+                                    # do not convert columns
+                                    col_types = cols(.default = "c"),
+                                    # escape special characters with backslash
+                                    escape_backslash = TRUE,
+                                    escape_double = FALSE,
+                                    ...)
+  
+  # Remove any last empty column (columns without name)
+  loaded_table <- loaded_table[, names(loaded_table) != ""]
+  
+  # Convert table to data.frame, convert column types with read.table() default type.convert()
+  loaded_table <- as.data.frame(lapply(loaded_table, function(x) type.convert(x, as.is = TRUE)))
 
   # do not manipulate meta tables
   if (is_meta_table) {

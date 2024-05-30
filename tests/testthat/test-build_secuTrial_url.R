@@ -9,15 +9,19 @@ instance <- "INSTANCE-01"
 customer <- "CUSTOMER-01"
 projid <- "1234"
 docid <- "5678"
+prefix <- "WOapplications/WebObjects/"
 
 # expected build_secuTrial_url() outputs
 sT_url_full <- paste0("https://server.secutrial.com/apps/WebObjects/INSTANCE-01.woa/wa/",
                       "choose?customer=CUSTOMER-01&projectid=1234&docid=5678")
 sT_url_customer <- "https://server.secutrial.com/apps/WebObjects/INSTANCE-01.woa/wa/choose?customer=CUSTOMER-01"
+sT_url_full2 <- paste0("https://server.secutrial.com/WOapplications/WebObjects/INSTANCE-01.woa/wa/",
+                       "choose?customer=CUSTOMER-01&projectid=1234&docid=5678")
 
 test_that("All urls built correctly", {
   expect_equal(build_secuTrial_url(server, instance, customer, projid, docid), sT_url_full)
   expect_equal(build_secuTrial_url(server2, instance, customer, projid, docid), sT_url_full)
+  expect_equal(build_secuTrial_url(server, instance, customer, projid, docid, prefix), sT_url_full2)
   expect_equal(suppressWarnings(build_secuTrial_url(server2, instance, customer, docid = docid)), sT_url_customer)
 })
 

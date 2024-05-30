@@ -28,6 +28,7 @@
 dates_secuTrial <- function(object, ...) UseMethod("dates_secuTrial", object)
 datetimes_secuTrial <- function(object, ...) UseMethod("datetimes_secuTrial", object)
 
+
 #' @rdname dates_secuTrial
 #' @export
 dates_secuTrial.secuTrialdata <- function(object, ...) {
@@ -46,141 +47,154 @@ dates_secuTrial.secuTrialdata <- function(object, ...) {
 }
 
 # @rdname dates_secuTrial
-# @param data data.frame
+# @param object data.frame
 # @param datevars string consisting of variables with dates
 # @param format format of dates (typically taken from \code{object$export_options$date_format})
-dates_secuTrial.data.frame <- function(data, datevars, timevars, dateformat, datetimeformat, form, warn = FALSE) {
+#' @export
+dates_secuTrial.data.frame <- function(object, datevars, timevars, dateformat, datetimeformat, form, warn = FALSE, ...) {
   warn_msg <- ""
-  datevars <- datevars[datevars %in% names(data)]
-  timevars <- timevars[timevars %in% names(data)]
+  datevars <- datevars[datevars %in% names(object)]
+  timevars <- timevars[timevars %in% names(object)]
   if (length(datevars) > 0) {
     for (x in datevars) {
-      newdatecol <- dates_secuTrial(data[, x], dateformat)
+      newdatecol <- dates_secuTrial(object[, x], dateformat, ...)
       # check for conversion of all else warn
-      if (length(which(is.na(newdatecol))) > length(which(is.na(data[, x])))) {
+      if (length(which(is.na(newdatecol))) > length(which(is.na(object[, x])))) {
         warn_msg <- paste0(warn_msg, "Not all dates were converted for\n",
                            "  variable: '", x,
                            "'\n  in form: '", form,
                            "'\n  This is likely due to incomplete date entries.\n")
       }
-      data[, paste0(x, ".date")] <- newdatecol
-      data <- .move_column_after(data, paste0(x, ".date"), x)
+      object[, paste0(x, ".date")] <- newdatecol
+      object <- .move_column_after(object, paste0(x, ".date"), x)
     }
   }
-  data
+  object
   if (length(timevars) > 0) {
     for (x in timevars) {
-      newdatecol <- datetimes_secuTrial(data[, x], datetimeformat)
+      newdatecol <- datetimes_secuTrial(object[, x], datetimeformat, ...)
       # check for conversion of all else warn
-      if (length(which(is.na(newdatecol))) > length(which(is.na(data[, x])))) {
+      if (length(which(is.na(newdatecol))) > length(which(is.na(object[, x])))) {
         warn_msg <- paste0(warn_msg, "Not all dates were converted for\n",
                            "  variable: '", x,
                            "'\n  in form: '", form,
                            "'\n  This is likely due to incomplete date entries.\n")
       }
-      data[, paste0(x, ".datetime")] <- newdatecol
-      data <- .move_column_after(data, paste0(x, ".datetime"), x)
+      object[, paste0(x, ".datetime")] <- newdatecol
+      object <- .move_column_after(object, paste0(x, ".datetime"), x)
     }
   }
   # only if there is at least one warning queued
   if (str_length(warn_msg)) {
     warning(warn_msg)
   }
-  data
+  object
 }
 
 # @rdname dates_secuTrial
-# @param var date variable to be converted
-dates_secuTrial.character <- function(var, format) {
+# @param object date variable to be converted
+#' @export
+dates_secuTrial.character <- function(object, format, ...) {
   # some export types probably return strings
-  d <- as.Date(var, format = format)
-  if (!is.null(label(var))) label(d) <- label(var)
-  if (!is.null(units(var))) units(d) <- units(var)
+  d <- as.Date(object, format = format)
+  if (!is.null(label(object))) label(d) <- label(object)
+  if (!is.null(units(object))) units(d) <- units(object)
   d
 }
-datetimes_secuTrial.character <- function(var, format) {
+#' @export
+datetimes_secuTrial.character <- function(object, format, ...) {
   # some export types probably return strings
-  d <- as.POSIXct(var, format = format)
-  if (!is.null(label(var))) label(d) <- label(var)
-  if (!is.null(units(var))) units(d) <- units(var)
+  d <- as.POSIXct(object, format = format)
+  if (!is.null(label(object))) label(d) <- label(object)
+  if (!is.null(units(object))) units(d) <- units(object)
   d
 }
 # @rdname dates_secuTrial
-dates_secuTrial.factor <- function(var, format) {
+#' @export
+dates_secuTrial.factor <- function(object, format, ...) {
   # depending on options, strings might be converted to factors
   # convert to string
-  d <- dates_secuTrial(as.character(var), format)
-  if (!is.null(label(var))) label(d) <- label(var)
-  if (!is.null(units(var))) units(d) <- units(var)
+  d <- dates_secuTrial(as.character(object), format, ...)
+  if (!is.null(label(object))) label(d) <- label(object)
+  if (!is.null(units(object))) units(d) <- units(object)
   d
 }
-datetimes_secuTrial.factor <- function(var, format) {
+#' @export
+datetimes_secuTrial.factor <- function(object, format, ...) {
   # depending on options, strings might be converted to factors
   # convert to string
-  d <- datetimes_secuTrial(as.character(var), format)
-  if (!is.null(label(var))) label(d) <- label(var)
-  if (!is.null(units(var))) units(d) <- units(var)
+  d <- datetimes_secuTrial(as.character(object), format, ...)
+  if (!is.null(label(object))) label(d) <- label(object)
+  if (!is.null(units(object))) units(d) <- units(object)
   d
 }
 # @rdname dates_secuTrial
-dates_secuTrial.integer <- function(var, format) {
+#' @export
+dates_secuTrial.integer <- function(object, format, ...) {
   # this is the default type
   # convert to string
-  d <- dates_secuTrial(as.character(var), format)
-  if (!is.null(label(var))) label(d) <- label(var)
-  if (!is.null(units(var))) units(d) <- units(var)
+  d <- dates_secuTrial(as.character(object), format, ...)
+  if (!is.null(label(object))) label(d) <- label(object)
+  if (!is.null(units(object))) units(d) <- units(object)
   d
 }
-datetimes_secuTrial.integer <- function(var, format) {
+#' @export
+datetimes_secuTrial.integer <- function(object, format, ...) {
   # this is the default type
   # convert to string
-  d <- datetimes_secuTrial(as.character(var), format)
-  if (!is.null(label(var))) label(d) <- label(var)
-  if (!is.null(units(var))) units(d) <- units(var)
-  d
-}
-# @rdname dates_secuTrial
-dates_secuTrial.numeric <- function(var, format) {
-  # this is the default type
-  # convert to string
-  d <- dates_secuTrial(as.character(var), format)
-  if (!is.null(label(var))) label(d) <- label(var)
-  if (!is.null(units(var))) units(d) <- units(var)
-  d
-}
-datetimes_secuTrial.numeric <- function(var, format) {
-  # this is the default type
-  # convert to string
-  d <- datetimes_secuTrial(as.character(var), format)
-  if (!is.null(label(var))) label(d) <- label(var)
-  if (!is.null(units(var))) units(d) <- units(var)
+  d <- datetimes_secuTrial(as.character(object), format, ...)
+  if (!is.null(label(object))) label(d) <- label(object)
+  if (!is.null(units(object))) units(d) <- units(object)
   d
 }
 # @rdname dates_secuTrial
-dates_secuTrial.logical <- function(var, format) {
-  # this happens when the variable is empty
+#' @export
+dates_secuTrial.numeric <- function(object, format, ...) {
+  # this is the default type
+  # convert to string
+  d <- dates_secuTrial(as.character(object), format, ...)
+  if (!is.null(label(object))) label(d) <- label(object)
+  if (!is.null(units(object))) units(d) <- units(object)
+  d
+}
+#' @export
+datetimes_secuTrial.numeric <- function(object, format, ...) {
+  # this is the default type
+  # convert to string
+  d <- datetimes_secuTrial(as.character(object), format)
+  if (!is.null(label(object))) label(d) <- label(object)
+  if (!is.null(units(object))) units(d) <- units(object)
+  d
+}
+# @rdname dates_secuTrial
+#' @export
+dates_secuTrial.logical <- function(object, format, ...) {
+  # this happens when the objectiable is empty
   # convert to string to get (empty) Date object
-  d <- dates_secuTrial(as.character(var), format)
-  if (!is.null(label(var))) label(d) <- label(var)
-  if (!is.null(units(var))) units(d) <- units(var)
+  d <- dates_secuTrial(as.character(object), format, ...)
+  if (!is.null(label(object))) label(d) <- label(object)
+  if (!is.null(units(object))) units(d) <- units(object)
   d
 }
-datetimes_secuTrial.logical <- function(var, format) {
-  # this happens when the variable is empty
+#' @export
+datetimes_secuTrial.logical <- function(object, format, ...) {
+  # this happens when the objectiable is empty
   # convert to string to get (empty) Date object
-  d <- datetimes_secuTrial(as.character(var), format)
-  if (!is.null(label(var))) label(d) <- label(var)
-  if (!is.null(units(var))) units(d) <- units(var)
+  d <- datetimes_secuTrial(as.character(object), format, ...)
+  if (!is.null(label(object))) label(d) <- label(object)
+  if (!is.null(units(object))) units(d) <- units(object)
   d
 }
 # @rdname dates_secuTrial
-dates_secuTrial.Date <- function(var, format) {
-  # in case a variable is already a date
-  warning(var, " is already a Date")
-  var
+#' @export
+dates_secuTrial.Date <- function(object, format, ...) {
+  # in case a objectiable is already a date
+  warning(object, " is already a Date")
+  object
 }
-datetimes_secuTrial.POSIXct <- function(var, format) {
-  # in case a variable is already a date
-  warning(var, " is already a POSIXct")
-  var
+#' @export
+datetimes_secuTrial.POSIXct <- function(object, format, ...) {
+  # in case a objectiable is already a date
+  warning(object, " is already a POSIXct")
+  object
 }
